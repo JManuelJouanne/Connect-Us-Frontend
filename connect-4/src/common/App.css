@@ -7,22 +7,53 @@
   text-align: center; 
 }
 body {
-	margin: 0; padding: 0;
+	margin: 0%; padding: 0%;
 	font-family: 'Gloria Hallelujah', cursive;
   color: white;
   -webkit-text-stroke: 0.05px black;
 }
 
+.title {
+  font-size: 750%;
+  padding: 5%;
+  width: 100%;
+  position: absolute;
+  margin: 0%;
+  top: 0%;
+  left: -5%;
+}
+
+.email-form {
+  position: relative;
+  display: inline-block;
+  padding: 0%;
+  margin: 1%;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.email-form input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  font-family: 'Gloria Hallelujah', cursive;
+  text-align: center;
+  font-size: 300%;
+}
+
 button {
   font-family: 'Gloria Hallelujah';
   border: 2px solid white;
-  border-radius: 20px;
-  padding: 10px 20px;
+  border-radius: 200px;
+  padding: 0%;
+  margin: 1%;
   color: white;
   background: none;
   text-align: center;
   text-decoration: none;
-  width: 180px;
+  width: 48%;
   font-size: 18px; /* establecer el tamaño de la letra deseado */
 }
 
@@ -31,16 +62,8 @@ button:hover {
   background-color: white;
 }
 
-#mainMenu {
+.menu {
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-}
-
-.botones {
-  position: absolute;
-  top: 50%;
-  left: 35%;
+  top: 40%;
+  left: 37%;
 }
