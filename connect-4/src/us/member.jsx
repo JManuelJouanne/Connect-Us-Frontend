@@ -1,6 +1,4 @@
 import './member.css'
-import rojo from "./../assets/imgs/rojo.png";
-import verde from "./../assets/imgs/verde.png";
 
 export default function Member({name, description, image}) {
     return (
