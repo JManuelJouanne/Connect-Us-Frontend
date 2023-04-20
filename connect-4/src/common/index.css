@@ -77,15 +77,8 @@ h1 {
   color: #c7c0c0;
 }
 
-.container {
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  height: fit-content;
-  width: 86%;
-}
+
+/***********AMONG US****************/
 
 .size {
   width: fit-content;
@@ -210,12 +203,76 @@ h1 {
           transform: rotate(6deg);
 }
 
+#mono2 {
+  animation-name: down;
+  position: absolute;
+  top: 0;
+  right: 30%;
+}
+#mono2 .player, #mono2 .legs, #mono2 .legs:before, #mono2 .back::before {
+  background-color: #815322;
+}
+#mono2 .player:after, #mono2 .back{
+  background-color: #ecbf71;
+}
+#mono2 .player{
+  animation-name: giro;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+
+#mono3 {
+  animation: none;
+  position: absolute;
+  top: 10%;
+  right: 70%;
+}
+#mono3 .player, #mono3 .legs, #mono3 .legs:before, #mono3 .back::before {
+  background-color: #222d81;
+}
+#mono3 .player:after, #mono3 .back{
+  background-color: #7177ec;
+}
+#mono3 .player{
+  animation-name: giro;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes giro {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes down {
+  0% {
+      top: -100%;
+  }
+  50% {
+      top: 100%;
+  }
+  51% {
+      top: 0%;
+  }
+  100% {
+      top: -100%;
+  }
+}
+
+
 @keyframes move {
   0% {
       right: 100%;
   }
   50% {
-      right: -1%;
+      right: -100%;
   }
   51% {
       right: -0%;
