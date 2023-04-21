@@ -1,0 +1,45 @@
+.rule {
+    background-color: #120020;
+    border: 1px solid #f9f7f7;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 300px;
+    width: 600px;
+    padding: 30px;
+}
+.next-button {
+    font-size: 3rem;
+    font-weight: 500;
+    color: #f8f8fa;
+    background-color: #120020;
+    text-decoration: inherit;
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    bottom: 0;
+    height: 20%;
+}
+.rule-content {
+    text-align: center;
+    height: 80%;
+}
+
+.n-rule {
+    font-size: 4rem;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 0px;
+    color: #f8f8fa;
+}

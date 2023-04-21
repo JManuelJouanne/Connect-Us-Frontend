@@ -3,6 +3,7 @@
     height: 200px;
     border: 1px solid #fff;
     box-shadow: 0 0 0 2px #fff;
+    vertical-align: middle;
 }
 
 .row {
@@ -11,12 +12,13 @@
     flex-wrap: wrap;
     padding: 0 4px;
     justify-content: center;
-    align-items: center;
 }
 
 .member {
     padding: 10px 40px 10px 40px;
     width: 35%;
+    align-items: center;
+    text-align: center;
 }
 
 .description {
@@ -32,3 +34,10 @@ h1{
     line-height: 1.5;
     margin-top: 0px;
 }
+h2{
+    font-size: 2rem;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: 0px;
+}
+
