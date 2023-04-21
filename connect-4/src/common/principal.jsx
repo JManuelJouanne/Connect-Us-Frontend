@@ -14,7 +14,7 @@ export default function Principal() {
             <a class="button" href="/us">sobre nosotros</a>
         </div>
         <div className="button-container">
-            <a href="/">salir</a>
+            <a class="button"href="/">salir</a>
         </div>
         </>
     )

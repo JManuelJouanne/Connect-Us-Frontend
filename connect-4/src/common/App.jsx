@@ -17,8 +17,8 @@ function App() {
           </form>
         </div>
         <div className='botones'>
-          <button>log in</button>
-          <button>sign up</button>
+          <a href="/principal">log in</a>
+          <a href="/principal">sign up</a>
         </div>
       </div>
     </div>
