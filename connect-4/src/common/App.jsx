@@ -4,7 +4,7 @@ function App() {
 
   return (
     <div className="App">
-      <div><h1 className='title'>connect us</h1></div>
+      <h1 className='title'>connect us</h1>
       <div className='menu'>
         <div>
           <form className="email-form">

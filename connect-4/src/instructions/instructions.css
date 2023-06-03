@@ -2,15 +2,16 @@
     background-color: #120020;
     border: 1px solid #f9f7f7;
     border-radius: 20px;
-    padding: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
     height: 300px;
     width: 600px;
+    margin: 0 auto; /* Agregamos esta propiedad */
     padding: 30px;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Agregamos esta propiedad */
+    justify-content: center; /* Agregamos esta propiedad */
+  }
+
 .next-button {
     font-size: 3rem;
     font-weight: 500;
@@ -28,12 +29,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    bottom: 0;
+    margin-top: 10px; /* Reemplazamos "bottom" por "margin-top" */
     height: 20%;
-}
+  }
 .rule-content {
-    text-align: center;
-    height: 80%;
+  text-align: center;
+  height: 100%; /* Cambiamos de 80% a 100% */
 }
 
 .n-rule {

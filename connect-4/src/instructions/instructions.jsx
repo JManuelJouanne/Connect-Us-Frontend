@@ -31,7 +31,9 @@ export default function Instructions() {
                 {id!=4 && <button onClick={next} className="next-button">&gt;&gt;</button>}
             </div>
         </div>
-        <a href="/principal">volver</a>
+        <div class="menu-container">
+            <a class = 'button' href="/principal">volver</a>
+        </div>
         </>
     )
 }
