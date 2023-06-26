@@ -30,8 +30,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <audio id="audio" loop autoPlay>
       <source src="/spaceship.mp3" type="audio/mpeg" />
     </audio>
-    <React.StrictMode>
       <Routing />
-    </React.StrictMode>
   </>,
 );
