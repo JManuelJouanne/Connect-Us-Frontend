@@ -5,6 +5,7 @@ import axios from 'axios';
 import rojo from "./../assets/imgs/rojo.jpeg";
 import amarillo from "./../assets/imgs/yellow.png";
 
+
 const Board = () => {
     const [turn, setTurn] = useState(1);
     const [cells, setCells] = useState([]);

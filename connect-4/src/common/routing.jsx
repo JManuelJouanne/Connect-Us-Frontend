@@ -4,6 +4,7 @@ import Instructions from '../instructions/instructions';
 import Us from '../us/us';
 import Principal from './principal';
 import Board from '../game/board'
+import UnirmePartida from './partidas/unirme_partida';
 
 export default function Routing() {
     return (
@@ -15,6 +16,7 @@ export default function Routing() {
                 <Route path={"/instructions"} element={<Instructions/>}/>
                 <Route path={"/us"} element={<Us/>}/>
                 <Route path={"/board"} element={<Board/>}/>
+                <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
             </Routes>
         </BrowserRouter>
         </>
