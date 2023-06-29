@@ -21,13 +21,6 @@
   margin-bottom: 10rem;
 }
 
-.email-form {
-  width: 20rem;
-  padding: 0.3rem;
-  margin-bottom: 1rem;
-
-}
-
 .botones {
   display: flex;
   justify-content: space-between;
@@ -36,4 +29,5 @@
 .botones a {
   flex: 1;
   margin-right: 1rem;
+  width: 100px;
 }

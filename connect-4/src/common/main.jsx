@@ -27,9 +27,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <div className="glass"></div>
       </div>
     </div>
-    <audio id="audio" loop autoPlay>
-      <source src="/spaceship.mp3" type="audio/mpeg" />
-    </audio>
       <Routing />
   </>,
 );
