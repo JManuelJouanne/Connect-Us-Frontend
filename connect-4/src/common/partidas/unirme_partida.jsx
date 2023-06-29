@@ -1,6 +1,6 @@
 import './unirme_partida.css';
 import axios from 'axios';
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 export default function UnirmePartida() {

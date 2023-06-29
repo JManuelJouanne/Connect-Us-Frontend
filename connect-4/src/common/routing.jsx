@@ -18,7 +18,6 @@ export default function Routing() {
                 <Route path={"/instructions"} element={<Instructions/>}/>
                 <Route path={"/us"} element={<Us/>}/>
                 <Route path={"/board"} element={<Board/>}/>
-                <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
                 <Route path={"/login"} element={<Login/>}/>
 
                 <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
