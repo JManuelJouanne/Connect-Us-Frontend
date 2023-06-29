@@ -6,6 +6,7 @@ import Principal from './principal';
 import Board from '../game/board'
 import UnirmePartida from './partidas/unirme_partida';
 import NuevaPartida from './partidas/nueva_partida';
+import Login from '../profile/login';
 
 export default function Routing() {
     return (
@@ -17,6 +18,9 @@ export default function Routing() {
                 <Route path={"/instructions"} element={<Instructions/>}/>
                 <Route path={"/us"} element={<Us/>}/>
                 <Route path={"/board"} element={<Board/>}/>
+                <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
+                <Route path={"/login"} element={<Login/>}/>
+
                 <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
                 <Route path={"/nueva_partida"} element={<NuevaPartida/>}/>
             </Routes>

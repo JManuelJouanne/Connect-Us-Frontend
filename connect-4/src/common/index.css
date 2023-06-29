@@ -287,19 +287,15 @@ p{
 
 /***********FORM****************/
 
-form{
-  display: inline-block;
-  border: 2px solid #fff;
-  border-radius: 10px;
-  background-color: transparent;
-  text-align: center;
-}
 
 input{
-  border: none;
+  border: 2px solid #fff;
+  border-radius: 70px;
+  width: 50%;
   outline: none;
   background-color: transparent;
   color: white;
   font-family: 'Gloria Hallelujah';
-  text-align: center;
+  text-align: left;
+  padding-left: 15px;
 }

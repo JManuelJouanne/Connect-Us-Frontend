@@ -5,20 +5,11 @@ function App() {
   return (
     <div className="App">
       <h1 className='title'>connect us</h1>
+      <h3 className='subtitle'>el primero en formar una linea con 4 de sus fichas ¡¡gana!!</h3>
       <div className='menu'>
-        <div>
-          <form className="email-form">
-            <input type="text" placeholder="email" required />
-          </form>
-        </div>
-        <div>
-          <form className="email-form">
-            <input type="password" placeholder="password" required />
-          </form>
-        </div>
         <div className='botones'>
-          <a href="/principal">log in</a>
-          <a href="/principal">sign up</a>
+          <a href="/login">log in</a>
+          <a href="/singup">sign up</a>
         </div>
       </div>
     </div>

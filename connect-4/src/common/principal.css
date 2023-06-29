@@ -16,7 +16,8 @@
   
 .button {
     width: 10rem;
-    
+    margin-left: 10px;
+    margin-right: 10px;
   }
   
 h1{
