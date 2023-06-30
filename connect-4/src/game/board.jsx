@@ -86,6 +86,29 @@ useEffect(() => {
   };
 }, [game]);
 
+//actualizamos las celdas
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/`)
+      .then(response => {
+        const updatedCells = response.data.map(cell => {
+          if (cell.status === 1) {
+            return { ...cell, color: 'red' };
+          } else if (cell.status === 2) {
+            return { ...cell, color: 'yellow' };
+          }
+          return cell;
+        });
+        setCells(updatedCells);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, 3000); // Call every 1 second
+
+  return () => clearInterval(intervalId); // Cleanup interval on component unmount
+}, [game]);
 
   // hacemos el handleClick
   const handleCellClick = id => {
