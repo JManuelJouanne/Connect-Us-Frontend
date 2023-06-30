@@ -5,7 +5,6 @@ import axios from 'axios';
 import rojo from './../assets/imgs/rojo.jpeg';
 import amarillo from './../assets/imgs/yellow.png';
 import {useLocation} from 'react-router-dom';
-import { set } from 'koa/lib/response';
 
 const Board = () => {
   const location = useLocation();
@@ -106,7 +105,7 @@ useEffect(() => {
       .catch(err => {
         console.error(err);
       });
-  }, 1000); // Call every 1 second
+  }, 3000); // Call every 1 second
 
   return () => clearInterval(intervalId); // Cleanup interval on component unmount
 }, [game]);
