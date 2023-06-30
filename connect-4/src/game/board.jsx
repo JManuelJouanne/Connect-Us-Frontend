@@ -7,27 +7,31 @@ import amarillo from './../assets/imgs/yellow.png';
 import {useLocation} from 'react-router-dom';
 
 const Board = () => {
-  const [gameSet, setGameSet] = useState(false);
   const location = useLocation();
+  const data = location.state;
+  console.log(data);
+
+  const [ready, setReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDelayOver, setIsDelayOver] = useState(false);
   const [turn, setTurn] = useState(1);
   const [cells, setCells] = useState([]);
   const [game, setGame] = useState();
-  const [player] = useState(location.state?.player);
 
-  // Seteamos el game
+  // I want to find a game with the data from the previous page
   useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/games`, { userId: player.userId })
-      .then(response => {
-        setGame(response.data);
-        console.log('Game Id: ', response.data.id);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }, []);
+    console.log(data);
+    if (data && data.game){
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${data.game.id}`)
+    .then(response => {
+      setGame(response.data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+  }, [data]);
+
 
   useEffect(() => {
     if (game) {
@@ -57,16 +61,15 @@ useEffect(() => {
 
   const checkPlayers = async () => {
     try {
-      if (game) { // Check if game state is defined
+      if (game && game.id) { // Check if game state is defined
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/players/game/${game.id}`
         );
+        console.log('Estamos en el checkPlayers');
 
         if (response.data.length === 2) {
-          clearInterval(intervalId); // Stop checking if two players have joined
-          // Proceed with your logic for a complete game
-          // For example, redirect to the game board
-          setGameSet(true);
+          clearInterval(intervalId); 
+          setReady(true);
         }
       }
     } catch (err) {
@@ -90,23 +93,19 @@ useEffect(() => {
     let winner = null;
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${game.id}`).then(response => {
       setTurn(response.data.turn);
-      console.log(turn);
     }).catch(err => {
       console.error(err);
     });
 
-    // setTurn(turn === 1 ? 2 : 1);
-
     const clickedCell = cells.find(cell => cell.id === id);
     const clickedColumn = clickedCell.column;
 
-    if(player.userId === turn){
+    if(data.player.number === turn){
 
     axios
       .patch(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/${clickedColumn}/`, { player: turn })
       .then(response => {
         const cellIndex = response.data.cell;
-        console.log(cellIndex);
         if (cellIndex.status === 1) {
           updatedCells = updatedCells.map(cell => {
             if (cell.id === cellIndex.id) {
@@ -127,7 +126,6 @@ useEffect(() => {
           .get(`${import.meta.env.VITE_BACKEND_URL}/games/${game.id}`)
           .then(response => {
             winner = response.data.winner;
-            console.log(winner);
             if (winner !== null) {
               alert(`Ganó el jugador ${winner}`);
               window.location.href = '/principal';
@@ -161,7 +159,7 @@ useEffect(() => {
 
   return (
     <div>
-      {isLoading || !gameSet ? (
+      {isLoading || !ready ? (
       <div className="loading-icon">
         <h1>cargando partida...</h1>
       </div>
