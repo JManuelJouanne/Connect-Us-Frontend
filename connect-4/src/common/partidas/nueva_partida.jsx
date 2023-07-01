@@ -16,10 +16,11 @@ export default function NuevaPartida() {
           .post(`${import.meta.env.VITE_BACKEND_URL}/games`, { userId: location.state.user.id })
           .then(response => {
             setGame(response.data);
+            console.log(response.data);
             axios.get(`${import.meta.env.VITE_BACKEND_URL}/players/game/${response.data.id}`)
             .then(response2 => {
               setPlayer(response2.data[0]);
-              console.log(response2.data[0]);
+              console.log(response2.data);
             })
             .catch(err => {
               console.error(err);

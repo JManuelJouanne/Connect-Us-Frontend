@@ -12,19 +12,28 @@ const Board = () => {
   console.log(data);
 
   const [ready, setReady] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isDelayOver, setIsDelayOver] = useState(false);
   const [turn, setTurn] = useState(1);
   const [cells, setCells] = useState([]);
   const [game, setGame] = useState();
 
   // I want to find a game with the data from the previous page
   useEffect(() => {
-    console.log(data);
     if (data && data.game){
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${data.game.id}`)
     .then(response => {
       setGame(response.data);
+      if (data.ready === false) {
+        console.log('Estamos en el if');
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/players/${data.game.id}`, { player: data.player.id})
+        .then(response2 => {
+          setPlayer(response2.data);
+          console.log(response2.data);
+          data.ready = true;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+      }
     })
     .catch(err => {
       console.error(err);
@@ -35,11 +44,6 @@ const Board = () => {
 
   useEffect(() => {
     if (game) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsDelayOver(true); // Set isDelayOver to true after 3 seconds
-      }, 3000); // Delay for 3000 milliseconds (3 seconds)
-
       axios
         .get(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/`)
         .then(response => {
@@ -49,9 +53,6 @@ const Board = () => {
         .catch(err => {
           console.error(err);
         })
-        .finally(() => {
-          setIsLoading(false);
-        });
     }
   }, [game]);
 
@@ -66,8 +67,10 @@ useEffect(() => {
           `${import.meta.env.VITE_BACKEND_URL}/players/game/${game.id}`
         );
         console.log('Estamos en el checkPlayers');
+        console.log(response.data);
 
         if (response.data.length === 2) {
+          console.log(response.data)
           clearInterval(intervalId); 
           setReady(true);
         }
@@ -86,49 +89,73 @@ useEffect(() => {
   };
 }, [game]);
 
-//actualizamos las celdas
 useEffect(() => {
-  const intervalId = setInterval(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/`)
-      .then(response => {
-        const updatedCells = response.data.map(cell => {
-          if (cell.status === 1) {
-            return { ...cell, color: 'red' };
-          } else if (cell.status === 2) {
-            return { ...cell, color: 'yellow' };
+  if (ready === true) {
+  const checkBoard = async () => {
+    let updatedCells = [...cells];
+    try {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/`)
+        .then(response => {
+          if (response.status === 1) {
+            updatedCells = updatedCells.map(cell => {
+              if (cell.id === cellIndex.id) {
+                return { ...cell, color: 'red' };
+              }
+              return cell;
+            });
+          } else if (response.status === 2) {
+            updatedCells = updatedCells.map(cell => {
+              if (cell.id === cellIndex.id) {
+                return { ...cell, color: 'yellow' };
+              }
+              return cell;
+            });
           }
-          return cell;
+          setCells(updatedCells);
+          console.log('actualizamos las celdas');
+        })
+        .catch(err => {
+          console.error(err);
         });
-        setCells(updatedCells);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }, 3000); // Call every 1 second
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  return () => clearInterval(intervalId); // Cleanup interval on component unmount
-}, [game]);
+  const checkTurn = async () => {
+    try {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${game.id}`)
+        .then(response => {
+          setTurn(response.data.turn);
+          console.log('actualizamos el turno', response.data.turn);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  setInterval(checkBoard, 5000);
+  setInterval(checkTurn, 5000);
+}
+}, [cells]);
 
   // hacemos el handleClick
   const handleCellClick = id => {
     let updatedCells = [...cells];
     let winner = null;
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${game.id}`).then(response => {
-      setTurn(response.data.turn);
-    }).catch(err => {
-      console.error(err);
-    });
-
+  
     const clickedCell = cells.find(cell => cell.id === id);
     const clickedColumn = clickedCell.column;
-
-    if(data.player.number === turn){
-
+    console.log(clickedColumn);
+  
     axios
-      .patch(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/${clickedColumn}/`, { player: turn })
+      .patch(`${import.meta.env.VITE_BACKEND_URL}/cells/${game.id}/${clickedColumn}/`, { player: data.player.number })
       .then(response => {
         const cellIndex = response.data.cell;
+        console.log(cellIndex);
         if (cellIndex.status === 1) {
           updatedCells = updatedCells.map(cell => {
             if (cell.id === cellIndex.id) {
@@ -161,8 +188,7 @@ useEffect(() => {
       .catch(err => {
         console.error(err);
       });
-  };
-};
+  };  
 
   const getImageSource = () => {
     if (turn === 1) {
@@ -174,15 +200,10 @@ useEffect(() => {
     }
   };
 
-  useEffect(() => {
-    if (isDelayOver) {
-      setIsLoading(false);
-    }
-  }, [isDelayOver]);
 
   return (
     <div>
-      {isLoading || !ready ? (
+      { !ready ? (
       <div className="loading-icon">
         <h1>cargando partida...</h1>
       </div>

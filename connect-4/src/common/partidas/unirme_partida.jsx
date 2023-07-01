@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 export default function UnirmePartida() {
   const [game, setGame] = useState();
   const [user, setUser] = useState({"id":1,"username":"manueljouanne","mail":"jmjouanne@uc.cl","password":"manuel123","createdAt":"2023-06-25T01:06:50.754Z","updatedAt":"2023-06-25T01:06:50.754Z"});
-  const [player, setPlayer] = useState();
 
   useEffect(() => {
     axios
@@ -14,14 +13,6 @@ export default function UnirmePartida() {
       .then(response => {
         setGame(response.data);
         console.log(response.data);
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/players/${response.data.id}`, { player: user.id})
-        .then(response2 => {
-          setPlayer(response2.data);
-          console.log(response2.data);
-        })
-        .catch(err => {
-          console.error(err);
-        });
       })
       .catch(err => {
         console.error(err);
@@ -31,7 +22,7 @@ export default function UnirmePartida() {
   return (
     <div className='unirme-partida'>
       <div className='separacion'>
-      <Link to={'/board'} state={{game:game, player:player}}>
+      <Link to={'/board'} state={{game:game, player:user, ready:false}}>
         partida random
         </Link>
         <div className='formulario'>
