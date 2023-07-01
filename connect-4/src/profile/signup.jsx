@@ -10,6 +10,7 @@ function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [user, setUser] = useContext(AuthContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -28,6 +29,7 @@ function Signup() {
                 const access_token = response.data.access_token;
                 setToken(access_token);
                 setMessage("Sign Up successful!");
+                setUser(response.data.user);
                 window.location.href = "/principal";
             }
         }).catch((error) => {

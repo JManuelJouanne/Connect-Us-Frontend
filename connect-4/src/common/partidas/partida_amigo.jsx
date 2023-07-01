@@ -1,11 +1,11 @@
-import './nueva_partida.css'
+import './partida_amigo.css'
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {useLocation} from 'react-router-dom';
 
 
-export default function NuevaPartida() {
+export default function PartidaAmigo() {
     const location = useLocation();
     const user = location?.state;
     const [game, setGame] = useState();

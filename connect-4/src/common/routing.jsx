@@ -4,11 +4,11 @@ import Instructions from '../instructions/instructions';
 import Us from '../us/us';
 import Principal from './principal';
 import Board from '../game/board'
-import UnirmePartida from './partidas/unirme_partida';
 import Login from './../profile/login';
 import Signup from './../profile/signup';
 import UserCheck from '../protected/UserCheck';
-import NuevaPartida from './partidas/nueva_partida';
+import PartidaAmigo from './partidas/partida_amigo';
+import PartidaRandom from './partidas/partida_random';
 
 
 export default function Routing() {
@@ -24,8 +24,8 @@ export default function Routing() {
                 <Route path={"/login"} element={<Login/>}/>
                 <Route path={"/signup"} element={<Signup/>}/>
                 <Route path={"/users"} element={<UserCheck/>}/>
-                <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
-                <Route path={"/nueva_partida"} element={<NuevaPartida/>}/>
+                <Route path={"/partida_random"} element={<PartidaRandom/>}/>
+                <Route path={"/partida_amigo"} element={<PartidaAmigo/>}/>
             </Routes>
         </BrowserRouter>
         </>

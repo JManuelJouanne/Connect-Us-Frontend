@@ -9,6 +9,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [user, setUser] = useContext(AuthContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -22,8 +23,10 @@ function Login() {
 
                 if (response.data.access_token) {
                     const access_token = response.data.access_token;
+                    const user_id = response.data.user;
                     setToken(access_token);
                     setMessage("Login successful!");
+                    setUser(user_id);
                     window.location.href = "/principal";
                 }
             }).catch((error) => {
