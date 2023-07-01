@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './instructions.css';
+import LogoutButton from './../profile/logout';
 
 export default function Instructions() {
     const [id, setId] = useState(1);
@@ -20,6 +21,7 @@ export default function Instructions() {
     
     return (
         <>
+        <LogoutButton />
         <h1>instrucciones</h1>
         <div className='rule'>
             <div className='rule-content'>
@@ -31,7 +33,7 @@ export default function Instructions() {
                 {id!=4 && <button onClick={next} className="next-button">&gt;&gt;</button>}
             </div>
         </div>
-        <div class="menu-container">
+        <div className="menu-container">
             <a class = 'button' href="/principal">volver</a>
         </div>
         </>

@@ -9,7 +9,7 @@ function App() {
       <div className='menu'>
         <div className='botones'>
           <a href="/login">log in</a>
-          <a href="/singup">sign up</a>
+          <a href="/signup">sign up</a>
         </div>
       </div>
     </div>
