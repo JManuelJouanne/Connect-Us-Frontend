@@ -9,7 +9,7 @@ export default function PartidaAmigo() {
   const { user, setUser } = useContext(AuthContext);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
-  const [redy, setRedy] = useState(false);
+  const [ready, setRedy] = useState(false);
 
   const nueva_partida = {
     method: 'post',
@@ -20,7 +20,7 @@ export default function PartidaAmigo() {
     },
   };
 
-  const buscar_partida = {
+  const unirme_partida = {
     method: 'post',
     url: `${import.meta.env.VITE_BACKEND_URL}/players/${game}`,
     headers: {
@@ -38,13 +38,13 @@ export default function PartidaAmigo() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios(buscar_partida).then((response) => {
+    axios(unirme_partida).then((response) => {
       console.log(response.data);
       setGame(event.target.value);
     })
     .catch(err => {
       console.error(err);
-      setMessage(err.response.data.message);
+      setMessage('el id es incorrecto');
     });
   };
 
@@ -103,8 +103,8 @@ export default function PartidaAmigo() {
           </>
         ) : ready === false ? (
           <>
-            <h1>el id de tu juego es {game}</h1>
-            <h2>esperando contrincante...</h2>
+            <h2>el id de tu juego es: {game.id}</h2>
+            <h3>esperando contrincante...</h3>
           </>
         ) : (
           <Link to={{ pathname: '/board', state: { game: game } }}>ir a jugar</Link>
