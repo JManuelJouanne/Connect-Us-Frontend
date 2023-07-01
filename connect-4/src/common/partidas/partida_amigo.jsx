@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from './../../profile/AuthContext';
+import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
   const { token } = useContext(AuthContext);
@@ -85,8 +86,9 @@ export default function PartidaAmigo() {
 
   
   return (
-    <div className="unirme-partida">
-      <div className="separacion">
+    <>
+    <LogoutButton />
+      <div id="menu-container">
         {game === null ? (
           <>
             <a onClick={handleClick}>nueva partida</a>
@@ -109,9 +111,9 @@ export default function PartidaAmigo() {
         ) : (
           <Link to={{ pathname: '/board', state: { game: game } }}>ir a jugar</Link>
         )}
+        <a href="/principal">atras</a>
       </div>
-      <a href="/principal">atras</a>
-    </div>
+    </>
   );
   
   
