@@ -1,6 +1,7 @@
 import Member from "./member";
 import rojo from "./../assets/imgs/rojo.jpeg";
 import verde from "./../assets/imgs/batman.png";
+import LogoutButton from './../profile/logout';
 
 export default function Us() {
     const names = ["manuel jouanne", "vicente delpiano"];
@@ -8,7 +9,7 @@ export default function Us() {
         "campeón mundial de cachipún bajo el agua, coleccionista de cordones de zapatillas"];
     return (
         <>
-            <h2>connect us</h2>
+            <LogoutButton />
             <h1>nosotros</h1>
             <h3>¡¡hola!!</h3>
             <div className="row">

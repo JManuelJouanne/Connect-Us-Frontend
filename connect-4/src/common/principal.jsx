@@ -1,6 +1,8 @@
-import './principal.css';
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import './principal.css'
+import axios from 'axios';
+import React, { useState } from 'react';
+import {BrowserRouter, Routes, Route, Link, Navigate} from 'react-router-dom';
+import LogoutButton from './../profile/logout';
 
 export default function Principal() {
   const [user, setUser] = useState({
@@ -14,6 +16,7 @@ export default function Principal() {
 
   return (
     <div>
+      <LogoutButton />
       <h1>connect us</h1>
       <h3>el primero en formar una linea con 4 de sus fichas ¡¡gana!!</h3>
       <div className="menu-container">
@@ -31,11 +34,6 @@ export default function Principal() {
           </a>
           <a className="button" href="/us">
             sobre nosotros
-          </a>
-        </div>
-        <div className="button-container">
-          <a className="button" href="/">
-            salir
           </a>
         </div>
       </div>
