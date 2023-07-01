@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import './index.css';
 import Routing from './routing';
+import AuthProvider from './../profile/AuthProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <>
+  <React.StrictMode>
     <div className="size" id="mono1">
       <div className="player">
         <div className="legs"></div>
@@ -27,6 +27,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <div className="glass"></div>
       </div>
     </div>
+    <AuthProvider>
       <Routing />
-  </>,
+    </AuthProvider>
+  </React.StrictMode>,
 );

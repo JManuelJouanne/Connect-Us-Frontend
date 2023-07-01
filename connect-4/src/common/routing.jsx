@@ -5,8 +5,11 @@ import Us from '../us/us';
 import Principal from './principal';
 import Board from '../game/board'
 import UnirmePartida from './partidas/unirme_partida';
+import Login from './../profile/login';
+import Signup from './../profile/signup';
+import UserCheck from '../protected/UserCheck';
 import NuevaPartida from './partidas/nueva_partida';
-import Login from '../profile/login';
+
 
 export default function Routing() {
     return (
@@ -19,7 +22,8 @@ export default function Routing() {
                 <Route path={"/us"} element={<Us/>}/>
                 <Route path={"/board"} element={<Board/>}/>
                 <Route path={"/login"} element={<Login/>}/>
-
+                <Route path={"/signup"} element={<Signup/>}/>
+                <Route path={"/users"} element={<UserCheck/>}/>
                 <Route path={"/unirme_partida"} element={<UnirmePartida/>}/>
                 <Route path={"/nueva_partida"} element={<NuevaPartida/>}/>
             </Routes>

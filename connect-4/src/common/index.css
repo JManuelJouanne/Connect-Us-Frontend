@@ -264,7 +264,7 @@ h3{
 a{
   font-family: 'Gloria Hallelujah';
   color: #fff;
-    text-align: center;
+  text-align: center;
   -webkit-text-stroke: 0.001px black;
   padding: 10px 30px;
   border: 2px solid white;
@@ -296,6 +296,20 @@ input{
   background-color: transparent;
   color: white;
   font-family: 'Gloria Hallelujah';
-  text-align: left;
-  padding-left: 15px;
+  text-align: center;
+}
+
+button {
+  border: 2px solid #fff;
+  border-radius: 60px;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  font-family: 'Gloria Hallelujah';
+  text-align: center;
+}
+
+button:hover{
+  background-color: white;
+  color: black;
 }
