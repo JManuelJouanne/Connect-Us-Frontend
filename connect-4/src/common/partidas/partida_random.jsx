@@ -8,7 +8,6 @@ export default function PartidaRandom() {
   const { token } = useContext(AuthContext);
   const [game, setGame] = useState();
   const [user, setUser] = useContext(AuthContext);
-  const [player, setPlayer] = useState();
 
   const config = {
     'method': 'post',
@@ -37,7 +36,7 @@ export default function PartidaRandom() {
     <div className='unirme-partida'>
       <h2>esperando contrincante...</h2>
       <div className='separacion'>
-        <Link to={'/board'} state={{game:game, player:player}}>
+        <Link to={'/board'} state={{game:game, config:data}}>
           Ir a Partida
         </Link>
       </div>
