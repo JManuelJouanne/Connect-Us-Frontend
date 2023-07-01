@@ -25,12 +25,12 @@ export default function UnirmePartida() {
       <Link to={'/board'} state={{game:game, player:user, ready:false}}>
         partida random
         </Link>
-        <div className='formulario'>
+        <div id='form'>
           <form action="">
             <input type="id" placeholder='elige un id' />
           </form>
-          <a href="/board">buscar</a>
         </div>
+        <a href="/board">buscar</a>
       </div>
       <a href="/principal">atras</a>
     </div>
