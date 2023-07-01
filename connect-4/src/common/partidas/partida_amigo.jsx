@@ -7,13 +7,13 @@ import { AuthContext } from './../../profile/AuthContext';
 export default function PartidaAmigo() {
   const { token } = useContext(AuthContext);
   const { user, setUser } = useContext(AuthContext);
-  const [game, setGame] = useState();
-  const [player, setPlayer] = useState();
+  const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
+  const [redy, setRedy] = useState(false);
 
   const nueva_partida = {
     method: 'post',
-    url: `${import.meta.env.VITE_BACKEND_URL}/players`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/games`,
     data: { userId: user },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -21,6 +21,14 @@ export default function PartidaAmigo() {
   };
 
   const buscar_partida = {
+    method: 'post',
+    url: `${import.meta.env.VITE_BACKEND_URL}/players/${game}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const ver_jugadores = {
     method: 'get',
     url: `${import.meta.env.VITE_BACKEND_URL}/players/game/${game}`,
     headers: {
@@ -29,11 +37,10 @@ export default function PartidaAmigo() {
   };
 
   const handleSubmit = (event) => {
-    console.log(game);
     event.preventDefault();
     axios(buscar_partida).then((response) => {
-      setPlayer(response.data.player);
       console.log(response.data);
+      setGame(event.target.value);
     })
     .catch(err => {
       console.error(err);
@@ -44,9 +51,8 @@ export default function PartidaAmigo() {
   const handleClick = (event) => {
     event.preventDefault();
     axios(nueva_partida).then((response) => {
-      setPlayer(response.data.player);
+      setGame(response.data);
       console.log(response.data);
-      window.location.href = "/board";
     })
     .catch(err => {
       console.error(err);
@@ -55,17 +61,59 @@ export default function PartidaAmigo() {
     console.log('hola');
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (game !== null) {
+        axios(ver_jugadores)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.length === 2) {
+              setRedy(true);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            setMessage(err.response.data.message);
+          });
+      }
+    }, 5000); // 5000 milliseconds = 5 seconds
+  
+    return () => {
+      clearInterval(interval); // Clean up the interval on component unmount
+    };
+  }, [game]);
+
+  
   return (
     <div className="unirme-partida">
       <div className="separacion">
-      <a href='/board' onClick={handleClick} >nueva partida</a>
-      <form onSubmit={handleSubmit} className="game">
-        <input type="id" name='id' value={game} onChange={e => setGame(e.target.value)} placeholder='ingresa el id del juego'/>
-        <input type="submit" value="buscar" id="buscar"/>
-        <p id="error">{message}</p>
-      </form>
+        {game === null ? (
+          <>
+            <a onClick={handleClick}>nueva partida</a>
+            <form onSubmit={handleSubmit} className="game">
+              <input
+                type="id"
+                name="id"
+                value={game}
+                placeholder="ingresa el id del juego"
+              />
+              <input type="submit" value="buscar" id="buscar" />
+              <p id="error">{message}</p>
+            </form>
+          </>
+        ) : ready === false ? (
+          <>
+            <h1>el id de tu juego es {game}</h1>
+            <h2>esperando contrincante...</h2>
+          </>
+        ) : (
+          <Link to={{ pathname: '/board', state: { game: game } }}>ir a jugar</Link>
+        )}
       </div>
       <a href="/principal">atras</a>
     </div>
   );
-}
+  
+  
+        
+}  
