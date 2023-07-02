@@ -5,11 +5,11 @@ import "./login.css";
 
 
 function Login() {
-    const { token, setToken } = useContext(AuthContext);
+    const { token, user, setToken, setUser } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
-    const [user, setUser] = useContext(AuthContext);
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
