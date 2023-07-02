@@ -99,7 +99,7 @@ export default function PartidaAmigo() {
                 value={game}
                 placeholder="ingresa el id del juego"
               />
-              <input type="submit" value="buscar" id="buscar" />
+              <input type="submit" value="buscar partida" id="buscar" />
               <p id="error">{message}</p>
             </form>
           </>
