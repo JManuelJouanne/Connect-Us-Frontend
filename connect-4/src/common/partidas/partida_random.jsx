@@ -5,16 +5,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "./../../profile/AuthContext";
 
 export default function PartidaRandom() {
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [game, setGame] = useState();
-  const [user, setUser] = useContext(AuthContext);
 
   const config = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/players`,
     'data': { userId: user },
     'headers': {
-        'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`
     }
   }
 
