@@ -6,60 +6,66 @@ import { AuthContext } from './../../profile/AuthContext';
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
-  const { token } = useContext(AuthContext);
-  const { user, setUser } = useContext(AuthContext);
+  const { token, user, setUser } = useContext(AuthContext);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
   const [ready, setRedy] = useState(false);
 
   const nueva_partida = {
-    method: 'post',
-    url: `${import.meta.env.VITE_BACKEND_URL}/games`,
-    data: { userId: user },
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    'method': 'post',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/games`,
+    'data': { userId: user },
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
   };
 
   const unirme_partida = {
-    method: 'post',
-    url: `${import.meta.env.VITE_BACKEND_URL}/players/${game}`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    'method': 'post',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/players/${game}`,
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
   };
 
-  const ver_jugadores = {
-    method: 'get',
-    url: `${import.meta.env.VITE_BACKEND_URL}/players/game/${game}`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  //const ver_jugadores = {
+  //  'method': 'get',
+  //  'url': `${import.meta.env.VITE_BACKEND_URL}/players/game/${game}`,
+  //  'headers': {
+  //    'Authorization': `Bearer ${token}`
+  //  }
+  //};
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     axios(unirme_partida).then((response) => {
       console.log(response.data);
       setGame(event.target.value);
     })
-    .catch(err => {
+    .catch(error => {
       console.error(err);
-      setMessage('el id es incorrecto');
+
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("Ocurrió un error, intente de nuevo.");
+      }
     });
   };
 
   const handleClick = (event) => {
     event.preventDefault();
+
     axios(nueva_partida).then((response) => {
-      setGame(response.data);
+      setGame(response.data.game.id);
       console.log(response.data);
     })
     .catch(err => {
       console.error(err);
-      setMessage(err.response.data.message);
+      setMessage("Ocurrió un error, intente de nuevo.");
     });
-    console.log('hola');
+    // console.log('hola');
   };
 
   useEffect(() => {
