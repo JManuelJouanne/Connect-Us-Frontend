@@ -1,18 +1,18 @@
-import React, { useState , useContext } from "react";
+import React, { useState , useContext, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
 import "./login.css";
 
 
 function Login() {
-    const { setUser , setToken } = useContext(AuthContext);
+    const { setToken, user, setUser, username, setUsername } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, { mail: email, password: password })
             .then((response) => {
                 console.log(response);
@@ -23,8 +23,12 @@ function Login() {
                 if (response.data.access_token) {
                     const access_token = response.data.access_token;
                     setToken(access_token);
-                    setUser(response.data.user);
-                    window.location.href = "/principal";
+                    const user_id = response.data.user;
+                    setUser(user_id);
+                    console.log(user);
+                    const username_r = response.data.username;
+                    setUsername(username_r);
+                    console.log(username);
                 }
             }).catch((error) => {
                 console.log(error);
@@ -36,6 +40,12 @@ function Login() {
                 setMessage(error.response.data.message);
             });
     }
+
+    useEffect(() => {
+        if (user !== 1) { //editar (user !== 0)
+            window.location.href = "/principal";
+        }
+    }, [user]);
 
     return (
         <div className="Login">

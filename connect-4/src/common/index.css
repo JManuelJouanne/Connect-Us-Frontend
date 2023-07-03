@@ -313,3 +313,7 @@ button:hover{
   background-color: white;
   color: black;
 }
+
+.Logout-container {
+  height: 60px;
+}
