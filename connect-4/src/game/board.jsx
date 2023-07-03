@@ -136,8 +136,6 @@ const Board = () => {
 
   // hacemos el handleClick
   const handleCellClick = id => {
-    let winner = null;
-
     const clickedCell = cells.find(cell => cell.id === id);
     const clickedColumn = clickedCell.column;
     const poner_ficha = {
