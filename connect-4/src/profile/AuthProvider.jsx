@@ -3,8 +3,6 @@ import { AuthContext } from "./AuthContext";
 
 export default function AuthProvider({ children }) {
     const [token, setToken] = useState(localStorage.getItem("token") || null);
-    const [user, setUser] = useState(1); //editar
-    const [username, setUsername] = useState("");
 
     useEffect(() => {
         localStorage.setItem("token", token);

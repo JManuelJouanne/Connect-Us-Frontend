@@ -42,7 +42,7 @@ function Login() {
     }
 
     useEffect(() => {
-        if (user !== 0) {
+        if (user !== 1) { //editar (user !== 0)
             window.location.href = "/principal";
         }
     }, [user]);

@@ -7,6 +7,7 @@ import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
   const { token, user } = useContext(AuthContext);
+  const [gameAux, setGameAux] = useState(null);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
   const [ready, setRedy] = useState(false);
@@ -22,7 +23,7 @@ export default function PartidaAmigo() {
 
   const unirme_partida = {
     'method': 'post',
-    'url': `${import.meta.env.VITE_BACKEND_URL}/players/${game}`,
+    'url': `${import.meta.env.VITE_BACKEND_URL}/players/${gameAux}`,
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -30,7 +31,7 @@ export default function PartidaAmigo() {
 
   const partida = {
     'method': 'get',
-    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${game}`,
+    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${gameAux}`,
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -57,6 +58,7 @@ export default function PartidaAmigo() {
 
     axios(unirme_partida).then((response) => {
       console.log(response.data);
+      setGame(response.data.game.id);
     })
     .catch(error => {
       console.error(err);
@@ -108,8 +110,8 @@ export default function PartidaAmigo() {
                 <input
                   type="id"
                   name="id"
-                  value={game}
-                  onChange={e => setGame(e.target.value)}
+                  value={gameAux}
+                  onChange={e => setGameAux(e.target.value)}
                   placeholder="ingresa el id del juego"
                 />
                 <input type="submit" value="buscar partida" id="buscar" />
@@ -119,7 +121,7 @@ export default function PartidaAmigo() {
           </div>
         ) : ready === false ? (
           <>
-            <h2>el id de tu juego es: {game.id}</h2>
+            <h2>el id de tu juego es: {game}</h2>
             <h3>esperando contrincante...</h3>
           </>
         ) : (
