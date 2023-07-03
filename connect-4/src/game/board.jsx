@@ -4,41 +4,34 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import rojo from './../assets/imgs/rojo.jpeg';
 import amarillo from './../assets/imgs/yellow.png';
-import { useLocation } from 'react-router-dom';
+import LogoutButton from '../profile/logout';
 
 import { AuthContext } from './../profile/AuthContext';
 
 const Board = () => {
-  const { token, user } = useContext(AuthContext);
-
-  const location = useLocation(); // Get id game from previous page
-  const data = location.state;
-  console.log(data);
-
-  const [turn, setTurn] = useState(null);
+  const { token } = useContext(AuthContext);  
+  const data = localStorage.getItem("MyData");
+  const parsedData = JSON.parse(data);
+  console.log(parsedData);
   const [cells, setCells] = useState([]);
-  const [game, setGame] = useState(null);
-  const [player, setPlayer] = useState(null);
 
-  const buscar_game = {
-    method: 'get',
-    url: `${import.meta.env.VITE_BACKEND_URL}/games/${data.game}`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  var turn = parsedData.game.turn;
+  const game = parsedData.game.id;
+  const player = parsedData.player.number;
+
+  console.log('turno', turn, game, player);
 
   const buscar_cells = {
     method: 'get',
-    url: `${import.meta.env.VITE_BACKEND_URL}/cells/${data.game}/`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/cells/${game}/`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const buscar_player = {
+  const buscar_game = {
     method: 'get',
-    url: `${import.meta.env.VITE_BACKEND_URL}/players/game/${data.game}`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/games/${game}/`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -46,40 +39,26 @@ const Board = () => {
 
   const poner_ficha = {
     method: 'patch',
-    url: `${import.meta.env.VITE_BACKEND_URL}/cells/${data.game}/`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/cells/${game}/`,
     data: { player: turn},
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  // I want to find a game with the data from the previous page
-  useEffect(() => {
-    console.log(data);
-    if (data && data.game) {
-      axios(buscar_game)
-        .then(response => {
-          setGame(response.data);
-          setTurn(response.data.turn);
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    }
-  }, [data]);
-
   useEffect(() => {
     const interval = setInterval(() => {
       axios(buscar_cells)
         .then(response => {
           console.log('Agregamos las celdas');
-          for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].status === 1) {
-              document.getElementById(response.data[i].id).style.backgroundColor = 'red';
-            } else if (response.data[i].status === 2) {
-              document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
-            }
-          }
+          console.log(response.data);
+          // for (let i = 0; i < response.data.length; i++) {
+          //   if (response.data[i].status === 1) {
+          //     document.getElementById(response.data[i].id).style.backgroundColor = 'red';
+          //   } else if (response.data[i].status === 2) {
+          //     document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
+          //   }
+          // }
           setCells(response.data);
         })
         .catch(err => {
@@ -92,25 +71,12 @@ const Board = () => {
     };
   }, [game]);
 
-  useEffect(() => { //seteamos el player
-    axios(buscar_player)
-      .then(response => {
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].userId === user) {
-            setPlayer(response.data[i]);
-          }
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }, [game]);
 
   useEffect(() => {              // establecemos el turno
     const interval = setInterval(() => {
       axios(buscar_game)
         .then(response => {
-          setTurn(response.data.turn);
+          turn = response.data.turn;
           getImageSource();
         })
         .catch(err => {
@@ -121,7 +87,7 @@ const Board = () => {
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
     };
-  }, [game, player]);
+  }, [game, player, turn]);
 
 
   // hacemos el handleClick
@@ -165,18 +131,21 @@ const Board = () => {
         <LogoutButton />
       </div>
       <div className="turnos">
-        <h3>Turno del jugador {turn}</h3>
+      {console.log('turno:', turn, 'player:', player)}
+        {turn === player?.number && <h2>¡Es tu turno!</h2>}
         <img id="imagen" src={getImageSource()} alt="" />
       </div>
       <div id="board">
         {turn === player?.number && (
           <>
-            <h2>¡Es tu turno!</h2>
-            {Object.values(cells).map(cell => (
-              <Cell key={cell.id} color={cell.color} onClick={() => handleCellClick(cell.id)} />
+            {cells.map(cell => (
+              <Cell key={cell.id}  onClick={() => handleCellClick(cell.id)} />
             ))}
           </>
         )}
+        {cells.map(cell => (
+              <Cell key={cell.id} />
+            ))}
       </div>
       <div className="menu-container">
         <a className="button" id="tablero" href="/principal">

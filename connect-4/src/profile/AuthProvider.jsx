@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
+import axios from 'axios';
 
 export default function AuthProvider({ children }) {
     const [token, setToken] = useState(localStorage.getItem("token") || null);

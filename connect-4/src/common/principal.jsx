@@ -6,7 +6,8 @@ import LogoutButton from './../profile/logout';
 import { AuthContext } from './../profile/AuthContext';
 
 export default function Principal() {
-  const { username, user } = useContext(AuthContext);
+  const { username } = useContext(AuthContext);
+  
   return (
     <div>
       <div className="Logout-container">

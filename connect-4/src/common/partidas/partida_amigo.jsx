@@ -1,22 +1,41 @@
 import './partida_amigo.css';
-import axios from 'axios';
+import axios from "axios";
 import { Link } from 'react-router-dom';
 import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from './../../profile/AuthContext';
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
-  const { token } = useContext(AuthContext);
+  const { token, getUser } = useContext(AuthContext);
   const [gameAux, setGameAux] = useState(null);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
   const [ready, setRedy] = useState(false);
+  const [user, setUser] = useState("");
 
-  console.log(username)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await getUser();
+        setUser(userResponse.data);
+        // Handle the user data
+        console.log(user);
+      } catch (error) {
+        // Handle error
+        console.error(error);
+      }
+    };
+  
+    fetchData();
+  }, []);  
+  
 
   const nueva_partida = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/games`,
+    'data':{
+      userId:user.id,
+    },
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -32,7 +51,7 @@ export default function PartidaAmigo() {
 
   const partida = {
     'method': 'get',
-    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${gameAux}`,
+    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${game}`,
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -47,7 +66,6 @@ export default function PartidaAmigo() {
       setGame(response.data.game.id);
       console.log(response.data);
       localStorage.setItem("MyData", JSON.stringify(response.data));
-      console.log(localStorage.getItem("MyData"))
 
     })
     .catch(err => {
@@ -62,10 +80,12 @@ export default function PartidaAmigo() {
 
     axios(unirme_partida).then((response) => {
       console.log(response.data);
+      localStorage.setItem("MyData", JSON.stringify(response.data));
+      console.log(localStorage.getItem("MyData"))
       setGame(response.data.game.id);
     })
     .catch(error => {
-      console.error(err);
+      console.error(error);
 
       if (error.response && error.response.data && error.response.data.message) {
         setMessage(error.response.data.message);
@@ -82,6 +102,7 @@ export default function PartidaAmigo() {
           .then((response) => {
             console.log(response.data);
             if (response.data.friend === 2) {
+              window.location.href = `/board`;
               setRedy(true);
             }
           })
