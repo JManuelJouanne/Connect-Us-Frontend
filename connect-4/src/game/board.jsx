@@ -12,38 +12,40 @@ const Board = () => {
   const { token } = useContext(AuthContext);  
   const data = localStorage.getItem("MyData");
   const parsedData = JSON.parse(data);
-  console.log(parsedData);
   const [cells, setCells] = useState([]);
+  const [turn, setTurn] = useState(1);
+  const [game, setGame] = useState(parsedData.gameId);
+  const [player, setPlayer] = useState(parsedData.player);
+  const [message, setMessage] = useState("");
 
-  var turn = parsedData.game.turn;
-  const game = parsedData.game.id;
-  const player = parsedData.player.number;
+  console.log(parsedData);
 
   console.log('turno', turn, game, player);
 
+  // Requests
   const buscar_cells = {
     method: 'get',
     url: `${import.meta.env.VITE_BACKEND_URL}/cells/${game}/`,
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   };
 
   const buscar_game = {
     method: 'get',
     url: `${import.meta.env.VITE_BACKEND_URL}/games/${game}/`,
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   };
 
   const poner_ficha = {
     method: 'patch',
     url: `${import.meta.env.VITE_BACKEND_URL}/cells/${game}/`,
-    data: { player: turn},
+    data: { player: turn },
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   };
 
   useEffect(() => {
@@ -52,13 +54,13 @@ const Board = () => {
         .then(response => {
           console.log('Agregamos las celdas');
           console.log(response.data);
-          // for (let i = 0; i < response.data.length; i++) {
-          //   if (response.data[i].status === 1) {
-          //     document.getElementById(response.data[i].id).style.backgroundColor = 'red';
-          //   } else if (response.data[i].status === 2) {
-          //     document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
-          //   }
-          // }
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].status === 1) {
+              document.getElementById(response.data[i].id).style.backgroundColor = 'red';
+            } else if (response.data[i].status === 2) {
+              document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
+            }
+          }
           setCells(response.data);
         })
         .catch(err => {
@@ -76,7 +78,7 @@ const Board = () => {
     const interval = setInterval(() => {
       axios(buscar_game)
         .then(response => {
-          turn = response.data.turn;
+          setTurn(response.data.turn);
           getImageSource();
         })
         .catch(err => {

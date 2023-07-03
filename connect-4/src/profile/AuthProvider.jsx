@@ -14,11 +14,15 @@ export default function AuthProvider({ children }) {
     }
 
     const getUser = async () => {
-        return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/me`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const config = {
+            'method': 'get',
+            'url': `${import.meta.env.VITE_BACKEND_URL}/users/me`,
+            'headers': {
+              'Authorization': `Bearer ${token}`
+            }
+        };
+
+        return await axios(config);
     };
 
     return (
