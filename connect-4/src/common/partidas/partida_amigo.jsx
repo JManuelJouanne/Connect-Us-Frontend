@@ -14,28 +14,18 @@ export default function PartidaAmigo() {
   const [user, setUser] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userResponse = await getUser();
-        setUser(userResponse.data);
-        // Handle the user data
-        console.log(user);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
-  
-    fetchData();
-  }, []);  
+    getUser()
+        .then((response) => {
+            setUser(response.data)
+            console.log("Session:", response.data)
+        })
+        .catch((err) => console.error(err))
+  }, [])
   
 
   const nueva_partida = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/games`,
-    'data':{
-      userId:user.id,
-    },
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -57,16 +47,15 @@ export default function PartidaAmigo() {
     }
   };
 
+  // Crear partida
   const handleClick = (event) => {
     event.preventDefault();
 
-    console.log(nueva_partida)
-
     axios(nueva_partida).then((response) => {
+      const myData = {gameId: response.data.game.id, player: response.data.player.number};
       setGame(response.data.game.id);
       console.log(response.data);
-      localStorage.setItem("MyData", JSON.stringify(response.data));
-
+      localStorage.setItem("MyData", JSON.stringify(myData));
     })
     .catch(err => {
       console.error(err);
@@ -75,14 +64,16 @@ export default function PartidaAmigo() {
     console.log('hola');
   };
 
+  // Unirse a partida
   const handleSubmit = (event) => {
     event.preventDefault();
 
     axios(unirme_partida).then((response) => {
-      console.log(response.data);
-      localStorage.setItem("MyData", JSON.stringify(response.data));
-      console.log(localStorage.getItem("MyData"))
+      const myData = {gameId: response.data.game.id, player: response.data.player.number};
       setGame(response.data.game.id);
+      console.log(response.data);
+      localStorage.setItem("MyData", JSON.stringify(myData));
+      console.log(localStorage.getItem("MyData"))
     })
     .catch(error => {
       console.error(error);
@@ -150,7 +141,7 @@ export default function PartidaAmigo() {
             <h3>esperando contrincante...</h3>
           </>
         ) : (
-          <Link to={{ pathname: '/board', state: { game: game } }}>ir a jugar</Link>
+          <h2>esperando contrincante...</h2>
         )}
         <a href="/principal">atras</a>
       </div>
