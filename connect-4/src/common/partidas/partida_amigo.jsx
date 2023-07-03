@@ -6,7 +6,7 @@ import { AuthContext } from './../../profile/AuthContext';
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
-  const { token, user, setUser } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
   const [ready, setRedy] = useState(false);
@@ -28,20 +28,35 @@ export default function PartidaAmigo() {
     }
   };
 
-  //const ver_jugadores = {
-  //  'method': 'get',
-  //  'url': `${import.meta.env.VITE_BACKEND_URL}/players/game/${game}`,
-  //  'headers': {
-  //    'Authorization': `Bearer ${token}`
-  //  }
-  //};
+  const partida = {
+    'method': 'get',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${game}`,
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault();
+
+    console.log(nueva_partida)
+
+    axios(nueva_partida).then((response) => {
+      setGame(response.data.game.id);
+      console.log(response.data);
+    })
+    .catch(err => {
+      console.error(err);
+      setMessage("Ocurrió un error, intente de nuevo.");
+    });
+    console.log('hola');
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     axios(unirme_partida).then((response) => {
       console.log(response.data);
-      setGame(event.target.value);
     })
     .catch(error => {
       console.error(err);
@@ -54,27 +69,13 @@ export default function PartidaAmigo() {
     });
   };
 
-  const handleClick = (event) => {
-    event.preventDefault();
-
-    axios(nueva_partida).then((response) => {
-      setGame(response.data.game.id);
-      console.log(response.data);
-    })
-    .catch(err => {
-      console.error(err);
-      setMessage("Ocurrió un error, intente de nuevo.");
-    });
-    // console.log('hola');
-  };
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (game !== null) {
-        axios(ver_jugadores)
+        axios(partida)
           .then((response) => {
             console.log(response.data);
-            if (response.data.length === 2) {
+            if (response.data.friend === 2) {
               setRedy(true);
             }
           })
@@ -93,22 +94,29 @@ export default function PartidaAmigo() {
   
   return (
     <>
-    <LogoutButton />
+    <div className="Logout-container">
+      <LogoutButton />
+    </div>
       <div id="menu-container">
         {game === null ? (
-          <>
-            <a onClick={handleClick}>nueva partida</a>
-            <form onSubmit={handleSubmit} className="game">
-              <input
-                type="id"
-                name="id"
-                value={game}
-                placeholder="ingresa el id del juego"
-              />
-              <input type="submit" value="buscar" id="buscar" />
-              <p id="error">{message}</p>
-            </form>
-          </>
+          <div className="row">
+            <div id="np">
+              <button onClick={handleClick}>nueva partida</button>
+            </div>
+            <div id="form">
+              <form onSubmit={handleSubmit} className="game">
+                <input
+                  type="id"
+                  name="id"
+                  value={game}
+                  onChange={e => setGame(e.target.value)}
+                  placeholder="ingresa el id del juego"
+                />
+                <input type="submit" value="buscar partida" id="buscar" />
+              </form>
+            </div>
+            <p id="error">{message}</p>
+          </div>
         ) : ready === false ? (
           <>
             <h2>el id de tu juego es: {game.id}</h2>

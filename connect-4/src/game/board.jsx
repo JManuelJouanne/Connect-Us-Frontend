@@ -161,27 +161,28 @@ const Board = () => {
 
   return (
     <div>
-      <>
-        <div className="turnos">
-          <h3>Turno del jugador {turn}</h3>
-          <img id="imagen" src={getImageSource()} alt="" />
-        </div>
-        <div id="board">
-          {turn === player?.number && (
-            <>
-              <h2>¡Es tu turno!</h2>
-              {Object.values(cells).map(cell => (
-                <Cell key={cell.id} color={cell.color} onClick={() => handleCellClick(cell.id)} />
-              ))}
-            </>
-          )}
-        </div>
-        <div className="menu-container">
-          <a className="button" id="tablero" href="/principal">
-            Atras
-          </a>
-        </div>
-      </>
+      <div className="Logout-container">
+        <LogoutButton />
+      </div>
+      <div className="turnos">
+        <h3>Turno del jugador {turn}</h3>
+        <img id="imagen" src={getImageSource()} alt="" />
+      </div>
+      <div id="board">
+        {turn === player?.number && (
+          <>
+            <h2>¡Es tu turno!</h2>
+            {Object.values(cells).map(cell => (
+              <Cell key={cell.id} color={cell.color} onClick={() => handleCellClick(cell.id)} />
+            ))}
+          </>
+        )}
+      </div>
+      <div className="menu-container">
+        <a className="button" id="tablero" href="/principal">
+          Atras
+        </a>
+      </div>
     </div>
   );
 };

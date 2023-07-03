@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "./../../profile/AuthContext";
+import LogoutButton from './../../profile/logout';
 
 export default function PartidaRandom() {
   const { token, user } = useContext(AuthContext);
@@ -33,6 +34,9 @@ export default function PartidaRandom() {
 
   return (
     <div className='unirme-partida'>
+      <div className="Logout-container">
+        <LogoutButton />
+      </div>
       <h2>esperando contrincante...</h2>
       <div className='separacion'>
         <Link to={'/board'} state={{game:game, config:data}}>
