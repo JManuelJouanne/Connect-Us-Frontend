@@ -5,7 +5,7 @@ import "./login.css";
 
 
 function Login() {
-    const { setToken, user, setUser, username, setUsername } = useContext(AuthContext);
+    const { setToken } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -23,12 +23,7 @@ function Login() {
                 if (response.data.access_token) {
                     const access_token = response.data.access_token;
                     setToken(access_token);
-                    const user_id = response.data.user;
-                    setUser(user_id);
-                    console.log(user);
-                    const username_r = response.data.username;
-                    setUsername(username_r);
-                    console.log(username);
+                    window.location.href = "/principal";
                 }
             }).catch((error) => {
                 console.log(error);
@@ -40,12 +35,6 @@ function Login() {
                 setMessage(error.response.data.message);
             });
     }
-
-    useEffect(() => {
-        if (user !== 0) { //editar (user !== 0)
-            window.location.href = "/principal";
-        }
-    }, [user]);
 
     return (
         <div className="Login">

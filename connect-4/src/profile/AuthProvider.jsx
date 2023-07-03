@@ -12,8 +12,16 @@ export default function AuthProvider({ children }) {
         setToken(null);
     }
 
+    const getUser = async () => {
+        return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    };
+
     return (
-        <AuthContext.Provider value={{ token, setToken, logout }}>
+        <AuthContext.Provider value={{ token, setToken, logout, getUser}}>
             {children}
         </AuthContext.Provider>
     )

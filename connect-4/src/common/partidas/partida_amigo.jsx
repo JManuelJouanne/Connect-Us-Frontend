@@ -6,7 +6,7 @@ import { AuthContext } from './../../profile/AuthContext';
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
-  const { username, token } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const [gameAux, setGameAux] = useState(null);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
@@ -17,7 +17,6 @@ export default function PartidaAmigo() {
   const nueva_partida = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/games`,
-    'data': { userId: username },
     'headers': {
       'Authorization': `Bearer ${token}`
     }
