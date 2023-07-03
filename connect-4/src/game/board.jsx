@@ -52,13 +52,13 @@ const Board = () => {
         .then(response => {
           console.log('Agregamos las celdas');
           console.log(response.data);
-          // for (let i = 0; i < response.data.length; i++) {
-          //   if (response.data[i].status === 1) {
-          //     document.getElementById(response.data[i].id).style.backgroundColor = 'red';
-          //   } else if (response.data[i].status === 2) {
-          //     document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
-          //   }
-          // }
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].status === 1) {
+              document.getElementById(response.data[i].id).style.backgroundColor = 'red';
+            } else if (response.data[i].status === 2) {
+              document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
+            }
+          }
           setCells(response.data);
         })
         .catch(err => {
@@ -98,8 +98,7 @@ const Board = () => {
     const clickedColumn = clickedCell.column;
       axios(poner_ficha).then(response => {
           console.log('ha jugado en la columna', clickedColumn);
-          axios
-            .get(buscar_game)
+          axios(buscar_game)
             .then(response => {
               if (response.data.winner !== null) {
                 alert(`Ganó el jugador ${response.data.winner}`);
@@ -127,32 +126,32 @@ const Board = () => {
 
   return (
     <div>
-      <div className="Logout-container">
-        <LogoutButton />
-      </div>
-      <div className="turnos">
-      {console.log('turno:', turn, 'player:', player)}
-        {turn === player?.number && <h2>¡Es tu turno!</h2>}
-        <img id="imagen" src={getImageSource()} alt="" />
-      </div>
-      <div id="board">
-        {turn === player?.number && (
-          <>
-            {cells.map(cell => (
-              <Cell key={cell.id}  onClick={() => handleCellClick(cell.id)} />
-            ))}
-          </>
-        )}
+  <div className="Logout-container">
+    <LogoutButton />
+  </div>
+  <div className="turnos">
+    {console.log('turno:', turn, 'player:', player)}
+    {turn === player?.number ? <h2>¡Es tu turno!</h2> : null}
+    <img id="imagen" src={getImageSource()} alt="" />
+  </div>
+  <div id="board">
+    {turn === player?.number && (
+      <>
         {cells.map(cell => (
-              <Cell key={cell.id} />
-            ))}
-      </div>
-      <div className="menu-container">
-        <a className="button" id="tablero" href="/principal">
-          Atras
-        </a>
-      </div>
-    </div>
+          <Cell key={cell.id} onClick={() => handleCellClick(cell.id)} />
+        ))}
+      </>
+    )}
+    {cells.map(cell => (
+      <Cell key={cell.id} onClick={() => handleCellClick(cell.id)} />
+    ))}
+  </div>
+  <div className="menu-container">
+    <a className="button" id="tablero" href="/principal">
+      Atras
+    </a>
+  </div>
+</div>
   );
 };
 
