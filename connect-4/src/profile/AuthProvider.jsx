@@ -10,11 +10,10 @@ export default function AuthProvider({ children }) {
 
     function logout() {
         setToken(null);
-        setUser(0);
     }
 
     return (
-        <AuthContext.Provider value={{ token, setToken, user, setUser, username, setUsername, logout }}>
+        <AuthContext.Provider value={{ token, setToken, logout }}>
             {children}
         </AuthContext.Provider>
     )

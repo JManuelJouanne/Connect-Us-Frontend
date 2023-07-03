@@ -6,16 +6,18 @@ import { AuthContext } from './../../profile/AuthContext';
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaAmigo() {
-  const { token, user } = useContext(AuthContext);
+  const { username, token } = useContext(AuthContext);
   const [gameAux, setGameAux] = useState(null);
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState("");
   const [ready, setRedy] = useState(false);
 
+  console.log(username)
+
   const nueva_partida = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/games`,
-    'data': { userId: user },
+    'data': { userId: username },
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -45,6 +47,9 @@ export default function PartidaAmigo() {
     axios(nueva_partida).then((response) => {
       setGame(response.data.game.id);
       console.log(response.data);
+      localStorage.setItem("MyData", JSON.stringify(response.data));
+      console.log(localStorage.getItem("MyData"))
+
     })
     .catch(err => {
       console.error(err);
