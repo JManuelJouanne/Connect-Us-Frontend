@@ -5,7 +5,7 @@ import "./login.css";
 
 
 function Signup() {
-    const { setUser, setToken } = useContext(AuthContext);
+    const { setToken } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -28,7 +28,6 @@ function Signup() {
                 const access_token = response.data.access_token;
                 setToken(access_token);
                 setMessage("Sign Up successful!");
-                setUser(response.data.user);
                 window.location.href = "/principal";
             }
         }).catch((error) => {
