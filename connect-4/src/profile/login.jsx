@@ -1,18 +1,18 @@
-import React, { useState , useContext } from "react";
+import React, { useState , useContext, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
 import "./login.css";
 
 
 function Login() {
-    const { token, setToken } = useContext(AuthContext);
+    const { setToken } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, { mail: email, password: password })
             .then((response) => {
                 console.log(response);
@@ -23,11 +23,15 @@ function Login() {
                 if (response.data.access_token) {
                     const access_token = response.data.access_token;
                     setToken(access_token);
-                    setMessage("Login successful!");
                     window.location.href = "/principal";
                 }
             }).catch((error) => {
                 console.log(error);
+                if (error.response && error.response.data && error.response.data.message) {
+                    setMessage(error.response.data.message);
+                } else {
+                    setMessage("Ocurrió un error, intente de nuevo.");
+                }
                 setMessage(error.response.data.message);
             });
     }

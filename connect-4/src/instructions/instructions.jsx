@@ -21,7 +21,9 @@ export default function Instructions() {
     
     return (
         <>
-        <LogoutButton />
+        <div className="Logout-container">
+            <LogoutButton />
+        </div>
         <h1>instrucciones</h1>
         <div className='rule'>
             <div className='rule-content'>

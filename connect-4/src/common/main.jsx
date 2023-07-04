@@ -5,7 +5,7 @@ import Routing from './routing';
 import AuthProvider from './../profile/AuthProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <>
     <div className="size" id="mono1">
       <div className="player">
         <div className="legs"></div>
@@ -30,5 +30,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <Routing />
     </AuthProvider>
-  </React.StrictMode>,
+  </>,
 );

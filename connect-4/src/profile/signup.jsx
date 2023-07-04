@@ -5,7 +5,7 @@ import "./login.css";
 
 
 function Signup() {
-    const { token, setToken } = useContext(AuthContext);
+    const { setToken } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
