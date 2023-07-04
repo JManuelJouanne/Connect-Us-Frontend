@@ -51,30 +51,31 @@ export default function PartidaRandom() {
         console.error(err);
         setMessage(err.response.data.message);
       });
-  }, [user.id]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (game !== null) {
-  //       axios(partida)
-  //         .then((response) => {
-  //           console.log(response.data);
-  //           if (response.data.friend === 2) {
-  //             window.location.href = `/board`;
-  //             setRedy(true);
-  //           }
-  //         })
-  //         .catch((err) => {
-  //           console.error(err);
-  //           setMessage(err.response.data.message);
-  //         });
-  //     }
-  //   }, 5000); // 5000 milliseconds = 5 seconds
+  }, []); // Empty dependency array
   
-  //   return () => {
-  //     clearInterval(interval); // Clean up the interval on component unmount
-  //   };
-  // }, [game]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (game !== null) {
+        axios(partida)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.friend === 2) {
+              window.location.href = `/board`;
+              setRedy(true);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            setMessage(err.response.data.message);
+          });
+      }
+    }, 5000); // 5000 milliseconds = 5 seconds
+  
+    return () => {
+      clearInterval(interval); // Clean up the interval on component unmount
+    };
+  }, [game]);
 
   return (
     <div className='unirme-partida'>
