@@ -23,8 +23,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.0",
     "safe-buffer": "^5.2.1",
+    "socket.io-client": "^4.7.1",
     "stream-browserify": "^3.0.0",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
