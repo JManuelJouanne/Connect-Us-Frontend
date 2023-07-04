@@ -24,6 +24,9 @@
 .turnos{
     justify-content: center;
     display: flex;
+    color: yellow;
+    font-size: 25px;
+    font-family: 'Gloria Hallelujah';
 }
 #imagen{
     width: 50px;
