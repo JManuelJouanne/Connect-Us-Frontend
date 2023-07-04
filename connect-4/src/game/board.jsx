@@ -23,7 +23,6 @@ export default function Board() {
   // Socket
   useEffect(() => {
     socket.on('connect', () => {
-      console.log(socket);
       console.log('Conexión establecida con el servidor WebSocket');
     });
 
@@ -31,7 +30,7 @@ export default function Board() {
       console.log('Mensaje recibido:', response)
       const data = response.response
       setMessage(data.message)
-      console.log(data.cell.gameId, game)
+      console.log('Mensaje:', data)
 
       if (data.cell && data.cell.gameId === game) {
         const cell = cells.find(cell => cell.id === data.cell.id)
@@ -43,13 +42,10 @@ export default function Board() {
           setTurn((cell.status % 2) + 1);
           getImageSource();
         }
-        // if (data.cell.status === 1) {
-        //   document.getElementById(data.cell.id).style.backgroundColor = 'red';
-        // } else if (data.cell.status === 2) {
-        //   document.getElementById(data.cell.id).style.backgroundColor = 'yellow';
-        // }
+
       } else {
         console.log('No se encontró la celda')
+        window.location.reload();
       }
     });
 
@@ -64,7 +60,10 @@ export default function Board() {
     const parsedData = JSON.parse(data);
     setPlayer(parsedData.player);
     setGame(parsedData.gameId);
+    console.log('Todo seteado');
   }, []);
+
+
   useEffect(() => {
     if (game) {
       const start = {
@@ -73,7 +72,6 @@ export default function Board() {
         'headers': {'Authorization': `Bearer ${token}`}
       };
       axios(start).then(response => {
-      console.log(response.data);
       setMessage(response.data.message);
       setTurn(response.data.turn);
       }).catch(err => {
@@ -87,78 +85,14 @@ export default function Board() {
       };
       axios(buscar_cells).then(response => {
         setCells(response.data);
-        for (let i = 0; i < response.data.length; i++) {
-          //console.log(document.getElementById(response.data[i].id));
-           if (response.data[i].status === 1) {
-             //document.getElementById(response.data[i].id).style.backgroundColor = 'red';
-           } else if (response.data[i].status === 2) {
-             //document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
-           }
-         }
+        console.log('Celdas seteadas');
       }).catch(err => {
         console.error(err);
       });
     }
   }, [game]);
 
-  useEffect(() => {
-    if (cells[62]) {
-      for (let i = 0; i < cells.length; i++) {
-        const element = document.getElementById(cells[i].id);
-        if (element) {
-          if (cells[i].status === 1) {
-            element.style.backgroundColor = 'red';
-          } else if (cells[i].status === 2) {
-            element.style.backgroundColor = 'yellow';
-          }
-        }
-      }
-    }
-  }, [cells]);
 
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     axios(buscar_cells)
-  //       .then(response => {
-  //         console.log('Agregamos las celdas');
-  //         console.log(response.data);
-  //         for (let i = 0; i < response.data.length; i++) {
-  //           if (response.data[i].status === 1) {
-  //             document.getElementById(response.data[i].id).style.backgroundColor = 'red';
-  //           } else if (response.data[i].status === 2) {
-  //             document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
-  //           }
-  //         }
-  //         setCells(response.data);
-  //       })
-  //       .catch(err => {
-  //         console.error(err);
-  //       });
-  //   }, 10000); // 5000 milliseconds = 5 seconds
-
-  //   return () => {
-  //     clearInterval(interval); // Clean up the interval on component unmount
-  //   };
-  // }, [game]);
-
-
-  // useEffect(() => {              // establecemos el turno
-  //   const interval = setInterval(() => {
-  //     axios(buscar_game)
-  //       .then(response => {
-  //         setTurn(response.data.turn);
-  //         getImageSource();
-  //       })
-  //       .catch(err => {
-  //         console.error(err);
-  //       });
-  //   }, 5000); // 5000 milliseconds = 5 seconds
-
-  //   return () => {
-  //     clearInterval(interval); // Clean up the interval on component unmount
-  //   };
-  // }, [game, player, turn]);
 
 
   // hacemos el handleClick
@@ -202,13 +136,13 @@ export default function Board() {
         {turn === player ? (
           <>
             {cells.map(cell => (
-              <Cell key={cell.id}  onClick={() => handleCellClick(cell.id)} />
+              <Cell key={cell.id} id={cell.id} status={cell.status} onClick={() => handleCellClick(cell.id)} />
             ))}
           </>
         ) : (
           <>
             {cells.map(cell => (
-              <Cell key={cell.id} />
+              <Cell key={cell.id} id={cell.id} status={cell.status} />
             ))}
           </>
         )}
