@@ -14,16 +14,14 @@ const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 export default function Board() {
   const { token } = useContext(AuthContext);  
   const [cells, setCells] = useState([]);
-  const [turn, setTurn] = useState(1);
+  const [turn, setTurn] = useState(null);
   const [game, setGame] = useState(null);
   const [player, setPlayer] = useState(0);
   const [message, setMessage] = useState("");
   //const [socket, setSocket] = useState(null)
 
-
+  // Socket
   useEffect(() => {
-    console.log('estableciendo conexión');
-    console.log(socket);
     socket.on('connect', () => {
       console.log(socket);
       console.log('Conexión establecida con el servidor WebSocket');
@@ -31,21 +29,27 @@ export default function Board() {
 
     socket.on('response', (response) => {
       console.log('Mensaje recibido:', response)
-      const data = JSON.parse(response.response)
+      const data = response.response
       setMessage(data.message)
-      if (data.cell && data.cell.game === game) {
-        if (data.cell.status === 1) {
-          document.getElementById(data.cell.id).style.backgroundColor = 'red';
-          setTurn(2)
-        } else if (data.cell.status === 2) {
-          document.getElementById(data.cell.id).style.backgroundColor = 'yellow';
-          setTurn(1)
-        }
+      console.log(data.cell.gameId, game)
+
+      if (data.cell && data.cell.gameId === game) {
         const cell = cells.find(cell => cell.id === data.cell.id)
         cell.status = data.cell.status
-        // setCells(cells)
         setCells([...cells])
-        getImageSource();
+        if (cell.status === 0) {
+          setTurn(0)
+        } else {
+          setTurn((cell.status % 2) + 1);
+          getImageSource();
+        }
+        // if (data.cell.status === 1) {
+        //   document.getElementById(data.cell.id).style.backgroundColor = 'red';
+        // } else if (data.cell.status === 2) {
+        //   document.getElementById(data.cell.id).style.backgroundColor = 'yellow';
+        // }
+      } else {
+        console.log('No se encontró la celda')
       }
     });
 
@@ -63,14 +67,15 @@ export default function Board() {
   }, []);
   useEffect(() => {
     if (game) {
-        const start = {
-          'method': 'get',
-          'url': `${import.meta.env.VITE_BACKEND_URL}/players/start/${game}`,
-          'headers': {'Authorization': `Bearer ${token}`}
-        };
-        axios(start).then(response => {
-        console.log(response.data);
-        setMessage(response.data.message);
+      const start = {
+        'method': 'get',
+        'url': `${import.meta.env.VITE_BACKEND_URL}/players/start/${game}`,
+        'headers': {'Authorization': `Bearer ${token}`}
+      };
+      axios(start).then(response => {
+      console.log(response.data);
+      setMessage(response.data.message);
+      setTurn(response.data.turn);
       }).catch(err => {
         console.error(err);
       });
@@ -82,12 +87,12 @@ export default function Board() {
       };
       axios(buscar_cells).then(response => {
         setCells(response.data);
-        // falta la renderizacion de las celdas?
         for (let i = 0; i < response.data.length; i++) {
+          //console.log(document.getElementById(response.data[i].id));
            if (response.data[i].status === 1) {
-             document.getElementById(response.data[i].id).style.backgroundColor = 'red';
+             //document.getElementById(response.data[i].id).style.backgroundColor = 'red';
            } else if (response.data[i].status === 2) {
-             document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
+             //document.getElementById(response.data[i].id).style.backgroundColor = 'yellow';
            }
          }
       }).catch(err => {
@@ -96,39 +101,20 @@ export default function Board() {
     }
   }, [game]);
 
-  // Socket
-  // useEffect(() => {
-  //   const sckt = new w3cwebsocket(`${import.meta.env.SOCKET_HOST}/ws/move`) //editar
-  //   setSocket(sckt)
-
-  //   socket.onopen = () => {
-  //     console.log('Conexión establecida')
-  //   };
-
-  //   socket.onmessage = (message) => {     // editar logica
-  //     console.log('Mensaje recibido:', message.data)
-  //     const data = JSON.parse(message.data)
-  //     setMessage(data.message)
-  //     if (data.cell.game === game) {
-  //       if (data.cell.status === 1) {
-  //         document.getElementById(data.cell.id).style.backgroundColor = 'red';
-  //         setTurn(2)
-  //       } else if (data.cell.status === 2) {
-  //         document.getElementById(data.cell.id).style.backgroundColor = 'yellow';
-  //         setTurn(1)
-  //       }
-  //       const cell = cells.find(cell => cell.id === data.cell.id)
-  //       cell.status = data.cell.status
-  //       // setCells(cells)
-  //       setCells([...cells])
-  //       getImageSource();
-  //     }
-  //   }
-
-  //   return () => {
-  //     socket.close();
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (cells[62]) {
+      for (let i = 0; i < cells.length; i++) {
+        const element = document.getElementById(cells[i].id);
+        if (element) {
+          if (cells[i].status === 1) {
+            element.style.backgroundColor = 'red';
+          } else if (cells[i].status === 2) {
+            element.style.backgroundColor = 'yellow';
+          }
+        }
+      }
+    }
+  }, [cells]);
 
 
   // useEffect(() => {

@@ -11,22 +11,17 @@ export default function PartidaRandom() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userResponse = await getUser();
-        setUser(userResponse.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    fetchData();
-  }, []);  
+    getUser()
+        .then((response) => {
+            setUser(response.data)
+            console.log("Session:", response.data)
+        })
+        .catch((err) => console.error(err))
+  }, [])
 
   const config = {
     'method': 'post',
     'url': `${import.meta.env.VITE_BACKEND_URL}/players`,
-    'data': { userId: user.id },
     'headers': {
       'Authorization': `Bearer ${token}`
     }
@@ -43,8 +38,10 @@ export default function PartidaRandom() {
   useEffect(() => {
     axios(config)
       .then((response) => {
+        const myData = {gameId: response.data.game.id, player: response.data.player.number};
         setGame(response.data.game.id);
-        localStorage.setItem("MyData", JSON.stringify(response.data));
+        console.log(response.data);
+        localStorage.setItem("MyData", JSON.stringify(myData));
       })
       .catch((err) => {
         console.error(err);
@@ -76,12 +73,15 @@ export default function PartidaRandom() {
   }, [game]);
 
   return (
-    <div className='unirme-partida'>
+    <>
       <div className="Logout-container">
         <LogoutButton />
       </div>
-      <h2>esperando contrincante...</h2>
-      <a href="/principal">atras</a>
-    </div>
+      <div className='unirme-partida'>
+        <h2>esperando contrincante...</h2>
+        <a href="/principal">atras</a>
+      </div>
+    </>
+    
   );
 } 

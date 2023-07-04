@@ -73,7 +73,6 @@ export default function PartidaAmigo() {
       setGame(response.data.game.id);
       console.log(response.data);
       localStorage.setItem("MyData", JSON.stringify(myData));
-      console.log(localStorage.getItem("MyData"))
     })
     .catch(error => {
       console.error(error);
@@ -137,7 +136,7 @@ export default function PartidaAmigo() {
           </div>
         ) : ready === false ? (
           <>
-            <h2>el id de tu juego es: {game}</h2>
+            <h2>el código de tu juego es: {game}</h2>
             <h3>esperando contrincante...</h3>
           </>
         ) : (
