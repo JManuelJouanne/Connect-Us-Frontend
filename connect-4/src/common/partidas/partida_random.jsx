@@ -45,7 +45,6 @@ export default function PartidaRandom() {
       .then((response) => {
         setGame(response.data.game.id);
         localStorage.setItem("MyData", JSON.stringify(response.data));
-        console.log(localStorage.getItem("MyData"))
       })
       .catch((err) => {
         console.error(err);
@@ -59,7 +58,6 @@ export default function PartidaRandom() {
       if (game !== null) {
         axios(partida)
           .then((response) => {
-            console.log(response.data);
             if (response.data.friend === 2) {
               window.location.href = `/board`;
               setRedy(true);
