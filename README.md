@@ -18,6 +18,6 @@ en caso de algun problema se puede ir al archivo `package.json` y apretar el bot
 ## Deploy
 El Deploy se hizo en Netlify, se puede acceder a la aplicación en el siguiente link: 
 ````
-[Connectus Website](https://main--connectusweb.netlify.app/)
+[connectUS](https://main--connectusweb.netlify.app/)
 
 `````
