@@ -14,8 +14,8 @@ export default function Board() {
   const { token } = useContext(AuthContext);  
   const [cells, setCells] = useState([]);
   const [turn, setTurn] = useState(0);
-  const [game, setGame] = useState(parseInt(localStorage.getItem("GameId")));
-  const [player, setPlayer] = useState(parseInt(localStorage.getItem("Player")));
+  const game = parseInt(localStorage.getItem("GameId"));
+  const player = parseInt(localStorage.getItem("Player"));
   const [message, setMessage] = useState("Cargando tablero...");
   const [winner, setWinner] = useState(0);
 
@@ -41,25 +41,19 @@ export default function Board() {
     socket.on('response', (response) => {
       const data = response.response
       setMessage(data.message)
-      console.log('Mensaje:', data)
+      console.log('Celda:', data.cell)
 
-      console.log(data.cell.gameId, '=', game)
+      // console.log(data.cell.gameId, '=', game)
       if (data.cell && data.cell.gameId === game) {
-        axios(buscar_cells).then(response => {
-          setCells(response.data);
-        }).catch(err => {
-          console.error(err);
-        });
+        setCells(data.board);
         if (data.message.includes("Ganó")) {
           setTurn(0)
           setWinner(parseInt(data.cell.status))
         } else {
           setTurn((data.cell.status % 2) + 1);
         }
-
       } else {
         console.log('No se encontró la celda')
-        // window.location.reload();
       }
     });
 
@@ -70,10 +64,6 @@ export default function Board() {
 
   // Seteo inicial
   useEffect(() => {
-    console.log('Player:', player);
-    console.log('Game:', game);
-    console.log('Turn:', turn);
-    
     axios(buscar_cells).then(response => {
       setCells(response.data);
     }).catch(err => {
@@ -88,16 +78,6 @@ export default function Board() {
       console.error(err);
     });
   }, []);
-
-  useEffect(() => {
-    if (winner !== 0) {
-      getImageSource();
-    }
-    if (turn !== 0) {
-      getImageSource();
-    }
-    console.log("Turno:", turn, "Ganador:", winner);
-  }, [winner, turn]);
 
   // hacemos el handleClick
   const handleCellClick = id => {
@@ -116,6 +96,16 @@ export default function Board() {
       setMessage('Ocurrió un error')
     }
   };
+
+  // Seteo de imagen
+  useEffect(() => {
+    if (winner !== 0) {
+      getImageSource();
+    }
+    if (turn !== 0) {
+      getImageSource();
+    }
+  }, [winner, turn]);
 
   const getImageSource = () => {
     if (turn === 1) {
