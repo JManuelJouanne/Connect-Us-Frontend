@@ -5,19 +5,8 @@ import { AuthContext } from "./../../profile/AuthContext";
 import LogoutButton from './../../profile/logout';
 
 export default function PartidaRandom() {
-  const { token, getUser } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const [game, setGame] = useState(null);
-  const [user, setUser] = useState("");
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    getUser()
-        .then((response) => {
-            setUser(response.data)
-            console.log("Session:", response.data)
-        })
-        .catch((err) => console.error(err))
-  }, [])
 
   const config = {
     'method': 'post',
@@ -35,17 +24,34 @@ export default function PartidaRandom() {
     }
   };
 
+  const borrar = {
+    'method': 'delete',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/games/${game}`,
+    'headers': {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault();
+
+    axios(borrar).catch((err) => {
+      console.error(err);
+    });
+    window.location.href = `/principal`;
+  }
+
   useEffect(() => {
     axios(config)
       .then((response) => {
-        const myData = {gameId: response.data.game.id, player: response.data.player.number};
         setGame(response.data.game.id);
         console.log(response.data);
-        localStorage.setItem("MyData", JSON.stringify(myData));
+        
+        localStorage.setItem("GameId", response.data.game.id);
+        localStorage.setItem("Player", response.data.player.number);
       })
       .catch((err) => {
         console.error(err);
-        setMessage(err.response.data.message);
       });
   }, []); // Empty dependency array
   
@@ -57,12 +63,10 @@ export default function PartidaRandom() {
           .then((response) => {
             if (response.data.friend === 2) {
               window.location.href = `/board`;
-              setRedy(true);
             }
           })
           .catch((err) => {
             console.error(err);
-            setMessage(err.response.data.message);
           });
       }
     }, 5000); // 5000 milliseconds = 5 seconds
@@ -79,7 +83,7 @@ export default function PartidaRandom() {
       </div>
       <div className='unirme-partida'>
         <h2>esperando contrincante...</h2>
-        <a href="/principal">atras</a>
+        <button onClick={handleClick}>atras</button>
       </div>
     </>
     
