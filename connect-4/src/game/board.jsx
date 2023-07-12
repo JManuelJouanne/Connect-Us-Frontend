@@ -2,7 +2,6 @@ import './board.css';
 import Cell from './cell';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-//import { w3cwebsocket } from 'websocket';
 import io from 'socket.io-client';
 import rojo from './../assets/imgs/rojo.jpeg';
 import amarillo from './../assets/imgs/yellow.png';
@@ -14,11 +13,24 @@ const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 export default function Board() {
   const { token } = useContext(AuthContext);  
   const [cells, setCells] = useState([]);
-  const [turn, setTurn] = useState(null);
-  const [game, setGame] = useState(null);
-  const [player, setPlayer] = useState(0);
-  const [message, setMessage] = useState("");
-  //const [socket, setSocket] = useState(null)
+  const [turn, setTurn] = useState(0);
+  const [game, setGame] = useState(parseInt(localStorage.getItem("GameId")));
+  const [player, setPlayer] = useState(parseInt(localStorage.getItem("Player")));
+  const [message, setMessage] = useState("Cargando tablero...");
+  const [winner, setWinner] = useState(0);
+
+  // requests
+  const buscar_cells = {
+    'method': 'get',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/cells/${game}`,
+    'headers': {'Authorization': `Bearer ${token}`}
+  };
+
+  const start = {
+    'method': 'get',
+    'url': `${import.meta.env.VITE_BACKEND_URL}/players/start/${game}`,
+    'headers': {'Authorization': `Bearer ${token}`}
+  };
 
   // Socket
   useEffect(() => {
@@ -27,25 +39,27 @@ export default function Board() {
     });
 
     socket.on('response', (response) => {
-      console.log('Mensaje recibido:', response)
       const data = response.response
       setMessage(data.message)
       console.log('Mensaje:', data)
 
+      console.log(data.cell.gameId, '=', game)
       if (data.cell && data.cell.gameId === game) {
-        const cell = cells.find(cell => cell.id === data.cell.id)
-        cell.status = data.cell.status
-        setCells([...cells])
-        if (cell.status === 0) {
+        axios(buscar_cells).then(response => {
+          setCells(response.data);
+        }).catch(err => {
+          console.error(err);
+        });
+        if (data.message.includes("Ganó")) {
           setTurn(0)
+          setWinner(parseInt(data.cell.status))
         } else {
-          setTurn((cell.status % 2) + 1);
-          getImageSource();
+          setTurn((data.cell.status % 2) + 1);
         }
 
       } else {
         console.log('No se encontró la celda')
-        window.location.reload();
+        // window.location.reload();
       }
     });
 
@@ -56,44 +70,34 @@ export default function Board() {
 
   // Seteo inicial
   useEffect(() => {
-    const data = localStorage.getItem("MyData");
-    const parsedData = JSON.parse(data);
-    setPlayer(parsedData.player);
-    setGame(parsedData.gameId);
-    console.log('Todo seteado');
+    console.log('Player:', player);
+    console.log('Game:', game);
+    console.log('Turn:', turn);
+    
+    axios(buscar_cells).then(response => {
+      setCells(response.data);
+    }).catch(err => {
+      console.error(err);
+    });
+
+    axios(start).then(response => {
+    setMessage(response.data.message);
+    setTurn(response.data.turn);
+    setWinner(parseInt(response.data.winner));
+    }).catch(err => {
+      console.error(err);
+    });
   }, []);
 
-
   useEffect(() => {
-    if (game) {
-      const start = {
-        'method': 'get',
-        'url': `${import.meta.env.VITE_BACKEND_URL}/players/start/${game}`,
-        'headers': {'Authorization': `Bearer ${token}`}
-      };
-      axios(start).then(response => {
-      setMessage(response.data.message);
-      setTurn(response.data.turn);
-      }).catch(err => {
-        console.error(err);
-      });
-
-      const buscar_cells = {
-        'method': 'get',
-        'url': `${import.meta.env.VITE_BACKEND_URL}/cells/${game}`,
-        'headers': {'Authorization': `Bearer ${token}`}
-      };
-      axios(buscar_cells).then(response => {
-        setCells(response.data);
-        console.log('Celdas seteadas');
-      }).catch(err => {
-        console.error(err);
-      });
+    if (winner !== 0) {
+      getImageSource();
     }
-  }, [game]);
-
-
-
+    if (turn !== 0) {
+      getImageSource();
+    }
+    console.log("Turno:", turn, "Ganador:", winner);
+  }, [winner, turn]);
 
   // hacemos el handleClick
   const handleCellClick = id => {
@@ -119,7 +123,13 @@ export default function Board() {
     } else if (turn === 2) {
       return amarillo;
     } else {
-      return null;
+      if (winner === 1) {
+        return rojo;
+      } else if (winner === 2) {
+        return amarillo;
+      } else {
+        console.log('No hay ganador');
+      }
     }
   };
 

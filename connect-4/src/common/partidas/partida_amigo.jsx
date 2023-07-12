@@ -52,10 +52,11 @@ export default function PartidaAmigo() {
     event.preventDefault();
 
     axios(nueva_partida).then((response) => {
-      const myData = {gameId: response.data.game.id, player: response.data.player.number};
       setGame(response.data.game.id);
       console.log(response.data);
-      localStorage.setItem("MyData", JSON.stringify(myData));
+      
+      localStorage.setItem("GameId", response.data.game.id);
+      localStorage.setItem("Player", response.data.player.number);
     })
     .catch(err => {
       console.error(err);
@@ -69,10 +70,11 @@ export default function PartidaAmigo() {
     event.preventDefault();
 
     axios(unirme_partida).then((response) => {
-      const myData = {gameId: response.data.game.id, player: response.data.player.number};
       setGame(response.data.game.id);
       console.log(response.data);
-      localStorage.setItem("MyData", JSON.stringify(myData));
+      
+      localStorage.setItem("GameId", response.data.game.id);
+      localStorage.setItem("Player", response.data.player.number);
     })
     .catch(error => {
       console.error(error);
@@ -125,11 +127,12 @@ export default function PartidaAmigo() {
                 <input
                   type="id"
                   name="id"
+                  className='input1'
                   value={gameAux}
                   onChange={e => setGameAux(e.target.value)}
-                  placeholder="ingresa el id del juego"
+                  placeholder="ingrese id"
                 />
-                <input type="submit" value="buscar partida" id="buscar" />
+                <input type="submit" className='input1' value="buscar partida" />
               </form>
             </div>
             <p id="error">{message}</p>

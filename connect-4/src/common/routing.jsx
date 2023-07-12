@@ -6,7 +6,6 @@ import Principal from './principal';
 import Board from '../game/board'
 import Login from './../profile/login';
 import Signup from './../profile/signup';
-import UserCheck from '../protected/UserCheck';
 import PartidaAmigo from './partidas/partida_amigo';
 import PartidaRandom from './partidas/partida_random';
 
@@ -23,7 +22,6 @@ export default function Routing() {
                 <Route path={"/board"} element={<Board/>}/>
                 <Route path={"/login"} element={<Login/>}/>
                 <Route path={"/signup"} element={<Signup/>}/>
-                <Route path={"/users"} element={<UserCheck/>}/>
                 <Route path={"/partida_random"} element={<PartidaRandom/>}/>
                 <Route path={"/partida_amigo"} element={<PartidaAmigo/>}/>
             </Routes>
