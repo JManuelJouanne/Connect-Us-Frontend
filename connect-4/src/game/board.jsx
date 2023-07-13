@@ -55,7 +55,7 @@ export default function Board() {
           }
         }
       } else {
-        // console.log('No se encontró la celda')
+        // console.log('No se encontró la celda') /
       }
     });
 
