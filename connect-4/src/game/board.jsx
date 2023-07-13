@@ -40,20 +40,22 @@ export default function Board() {
 
     socket.on('response', (response) => {
       const data = response.response
-      console.log('Celda:', data.cell)
+      // console.log('Celda:', data.cell)
       
       // console.log(data.cell.gameId, '=', game)
-      if (data.cell && data.cell.gameId === game) {
+      if (data.game === game) {
         setMessage(data.message)
-        setCells(data.board);
-        if (data.message.includes("Ganó")) {
-          setTurn(0)
-          setWinner(parseInt(data.cell.status))
-        } else {
-          setTurn((data.cell.status % 2) + 1);
+        if (data.board) {
+          setCells(data.board);
+          if (data.message.includes("Ganó")) {
+            setTurn(0)
+            setWinner(parseInt(data.cell.status))
+          } else {
+            setTurn((data.cell.status % 2) + 1);
+          }
         }
       } else {
-        console.log('No se encontró la celda')
+        // console.log('No se encontró la celda') /
       }
     });
 
