@@ -40,11 +40,11 @@ export default function Board() {
 
     socket.on('response', (response) => {
       const data = response.response
-      setMessage(data.message)
       console.log('Celda:', data.cell)
-
+      
       // console.log(data.cell.gameId, '=', game)
       if (data.cell && data.cell.gameId === game) {
+        setMessage(data.message)
         setCells(data.board);
         if (data.message.includes("Ganó")) {
           setTurn(0)
